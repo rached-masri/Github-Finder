@@ -17,6 +17,7 @@ export const GithubProvider = ({ children }) => {
 
 
   const fetchUsers = async () => {
+    setLoading()
     const response = await fetch(`${GITHUB_URL}/users`, {
       headers: {
         Authorization: `token ${GITHUB_TOKEN}`,
@@ -31,6 +32,9 @@ export const GithubProvider = ({ children }) => {
     })
 
   };
+
+  // Set loading
+  const setLoading = () => dispatch({type:'SET_LOADING'})
 
   return (
     <GithubContext.Provider
