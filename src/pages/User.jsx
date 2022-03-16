@@ -1,14 +1,16 @@
 import { FaCodepen, FaStore, FaUserFriends, FaUsers } from "react-icons/fa";
 import { useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Spinner from "../components/layout/Spinner";
-import GithubContext from "../../context/github/GithubContext";
-
+import GithubContext from "../context/github/GithubContext";
 function User() {
   const { getUser, user, loading } = useContext(GithubContext);
 
+const params = useParams()  
+
   useEffect(() => {
-    getUser(match.params.login);
+    getUser(params.login);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const {
@@ -82,7 +84,7 @@ function User() {
                   <div className="text-lg stat-value">{location}</div>
                 </div>
               )}
-              {blog && (
+              {/* {blog && (
                 <div className="stat">
                   <div className="stat-title text-md">Website</div>
                   <div className="text-lg stat-value">
@@ -91,7 +93,7 @@ function User() {
                     </a>
                   </div>
                 </div>
-              )}
+              )} */}
               {twitter_username && (
                 <div className="stat">
                   <div className="stat-title text-md">Twitter</div>
