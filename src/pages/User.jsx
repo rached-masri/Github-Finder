@@ -1,9 +1,11 @@
 import { FaCodepen, FaStore, FaUserFriends, FaUsers } from "react-icons/fa";
 import { useEffect, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Spinner from "../components/layout/Spinner";
+import RepoList from "../components/repos/RepoList";
 import GithubContext from "../context/github/GithubContext";
-import { getUser, getUserRepos } from "../context/github/GithubActions";
+import { getUserAndRepos } from "../context/github/GithubActions";
+
 function User() {
   const { user, loading, repos, dispatch } = useContext(GithubContext);
 
@@ -12,12 +14,10 @@ function User() {
   useEffect(() => {
     dispatch({ type: "SET_LOADING" });
     const getUserData = async () => {
-      const userData = await getUser(params.login);
-      dispatch({ type: "GET_User", payload: userData });
-
-      const userRepoData = await getUserRepos(params.login);
-      dispatch({ type: "GET_REPOS", payload: userRepoData });
+      const userData = await getUserAndRepos(params.login);
+      dispatch({ type: "GET_USER_AND_REPOS", payload: userData });
     };
+
     getUserData();
   }, [dispatch, params.login]);
 
@@ -42,6 +42,8 @@ function User() {
     return <Spinner />;
   }
 
+  const websiteUrl = blog?.startsWith("http") ? blog : "https://" + blog;
+
   return (
     <>
       <div className="w-full mx-auto lg:w-10/12">
@@ -63,6 +65,7 @@ function User() {
               </div>
             </div>
           </div>
+
           <div className="col-span-2">
             <div className="mb-6">
               <h1 className="text-3xl card-title">
@@ -92,7 +95,7 @@ function User() {
                   <div className="text-lg stat-value">{location}</div>
                 </div>
               )}
-              {/* {blog && (
+              {blog && (
                 <div className="stat">
                   <div className="stat-title text-md">Website</div>
                   <div className="text-lg stat-value">
@@ -101,7 +104,7 @@ function User() {
                     </a>
                   </div>
                 </div>
-              )} */}
+              )}
               {twitter_username && (
                 <div className="stat">
                   <div className="stat-title text-md">Twitter</div>
@@ -163,11 +166,11 @@ function User() {
             </div>
           </div>
         </div>
+
+        <RepoList repos={repos} />
       </div>
     </>
   );
-
-  return <div>{user.login}</div>;
 }
 
 export default User;
